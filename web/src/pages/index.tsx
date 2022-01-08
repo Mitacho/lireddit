@@ -1,15 +1,17 @@
 import { withUrqlClient } from "next-urql";
 import { usePostsQuery } from "../generated/graphql";
-
-import Navbar from "../components/Navbar";
-
 import { createUrqlClient } from "../utils/createUrqlClient";
+import Layout from "../components/Layout";
+import { Link } from "@chakra-ui/react";
+import NextLink from "next/link";
 
 function Index(): JSX.Element {
   const [{ data }] = usePostsQuery();
   return (
-    <>
-      <Navbar />
+    <Layout>
+      <NextLink href="/create-post">
+        <Link>create post</Link>
+      </NextLink>
       <div>안녕하세요</div>
       <br />
       {!data ? (
@@ -17,7 +19,7 @@ function Index(): JSX.Element {
       ) : (
         data.posts.map((p) => <div key={p.id}>{p.title}</div>)
       )}
-    </>
+    </Layout>
   );
 }
 
