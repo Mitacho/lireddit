@@ -32,7 +32,9 @@
       "@utils/*": ["utils/*"],
       "@utils": ["utils"],
       "@inputs/*": ["inputs/*"],
-      "@inputs": ["inputs"]
+      "@inputs": ["inputs"],
+      "@middleware/*": ["middleware/*"],
+      "@middleware": ["middleware"]
     }
   },
   "exclude": ["node_modules"],

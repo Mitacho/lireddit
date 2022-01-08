@@ -44,6 +44,7 @@
     "@entities": "dist/entities/",
     "@resolvers": "dist/resolvers/",
     "@utils": "dist/utils/",
-    "@inputs": "dist/inputs/"
+    "@inputs": "dist/inputs/",
+    "@middleware": "dist/middleware/"
   }
 }
