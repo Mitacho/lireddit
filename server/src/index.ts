@@ -2,6 +2,7 @@ import "reflect-metadata";
 import "module-alias/register";
 import "dotenv/config";
 
+import path from "path";
 import fastify from "fastify";
 import fastifyCors from "fastify-cors";
 import fastifySession from "fastify-secure-session";
@@ -44,8 +45,11 @@ function fastifyAppClosePlugin(app: FastifyInstance) {
     password: DATABASE_USER_PASSWORD,
     logging: true,
     synchronize: true,
+    migrations: [path.join(__dirname, "./migrations/*")],
     entities: [User, Post],
   });
+
+  await conn.runMigrations();
 
   const redis = new Redis();
 
