@@ -51,6 +51,8 @@ function fastifyAppClosePlugin(app: FastifyInstance) {
 
   await conn.runMigrations();
 
+  // await Post.delete({});
+
   const redis = new Redis();
 
   const app = fastify();
