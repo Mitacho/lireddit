@@ -1,3 +1,4 @@
+import { Field, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
@@ -7,7 +8,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { ObjectType, Field } from "type-graphql";
 import { User } from ".";
 
 @ObjectType()
@@ -33,6 +33,7 @@ export class Post extends BaseEntity {
   @Column()
   creatorId: number;
 
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.posts)
   creator: User;
 

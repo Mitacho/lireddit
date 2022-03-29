@@ -1,29 +1,26 @@
-import "reflect-metadata";
-import "module-alias/register";
+import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
+import { ApolloServer } from "apollo-server-fastify";
 import "dotenv/config";
-
-import path from "path";
+import type { FastifyInstance } from "fastify";
 import fastify from "fastify";
 import fastifyCors from "fastify-cors";
 import fastifySession from "fastify-secure-session";
-import { ApolloServer } from "apollo-server-fastify";
-import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
-import { createConnection } from "typeorm";
-import { buildSchema } from "type-graphql";
 import Redis from "ioredis";
-
-import { HelloResolver, PostResolver, UserResolver } from "@resolvers";
-import { User, Post } from "@entities";
+import "module-alias/register";
+import path from "path";
+import "reflect-metadata";
+import { buildSchema } from "type-graphql";
+import { createConnection } from "typeorm";
 import {
-  SESSION_SECRET,
-  SESSION_TTL,
-  PROD,
   COOKIE_NAME,
   DATABASE_USER,
   DATABASE_USER_PASSWORD,
-} from "@constants";
-
-import type { FastifyInstance } from "fastify";
+  PROD,
+  SESSION_SECRET,
+  SESSION_TTL,
+} from "./constants";
+import { Post, User } from "./entities";
+import { HelloResolver, PostResolver, UserResolver } from "./resolvers";
 
 function fastifyAppClosePlugin(app: FastifyInstance) {
   return {
@@ -40,7 +37,7 @@ function fastifyAppClosePlugin(app: FastifyInstance) {
 (async function main(): Promise<void> {
   const conn = await createConnection({
     type: "postgres",
-    database: "lireddit2",
+    database: "lireddit",
     username: DATABASE_USER,
     password: DATABASE_USER_PASSWORD,
     logging: true,
