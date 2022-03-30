@@ -1,27 +1,27 @@
 import {
-  Arg,
-  Ctx,
-  Field,
-  Mutation,
-  ObjectType,
-  Query,
-  Resolver,
-} from "type-graphql";
-import argon2 from "argon2";
-import { v4 } from "uuid";
-
-import { User } from "@entities/User";
-import {
   FORGET_PASSWORD_EXPIRATION,
   REDIS_FORGET_PASSWORD_PREFIX,
   SESSION_KEY,
 } from "@constants";
-import { emailRegex } from "@utils/regex";
-import { validatePassword, validateRegister } from "@utils/validators";
-import sendEmail from "@utils/sendEmail";
+import { User } from "@entities/User";
 import { UsernamePasswordInput } from "@inputs/UsernamePasswordInput";
-
 import type { Context } from "@types";
+import { emailRegex } from "@utils/regex";
+import sendEmail from "@utils/sendEmail";
+import { validatePassword, validateRegister } from "@utils/validators";
+import argon2 from "argon2";
+import {
+  Arg,
+  Ctx,
+  Field,
+  FieldResolver,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+  Root,
+} from "type-graphql";
+import { v4 } from "uuid";
 
 @ObjectType()
 class FieldError {
@@ -41,8 +41,19 @@ class UserResponse {
   user?: User;
 }
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  @FieldResolver(() => String)
+  email(@Root() user: User, @Ctx() { request }: Context) {
+    const userId = request.session.get(SESSION_KEY);
+    console.log(userId);
+    if (userId === user.id) {
+      return user.email;
+    }
+
+    return "";
+  }
+
   @Mutation(() => UserResponse)
   async changePassword(
     @Arg("token") token: string,
